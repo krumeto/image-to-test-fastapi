@@ -17,17 +17,19 @@ class Textlist(BaseModel):
         if not all(isinstance(article, str) for article in articles):
             raise ValueError(f"All articles should be of type string")
         return articles
+    
+class TextRequest(BaseModel):
+    text: str
 
 app = FastAPI()
 
-class TextRequest(BaseModel):
-    text: str
+@app.get("/")
+def root():
+    return {"message": "hello world again"}
+
 
 @app.post("/keywords")
 async def generate_keywords(request: Request, text: TextRequest):
     keywords = extract_keywords(text.text)
     return{"keywords": keywords}
 
-@app.get("/")
-def root():
-    return {"message": "hello world again"}
